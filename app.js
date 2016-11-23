@@ -1,4 +1,4 @@
-var http = require('http');
+var https = require('https');
 var bodyParser = require('body-parser');
 var express = require('express');
 
@@ -12,7 +12,7 @@ app.post('/callback', function (req, res) {
 });
 
 // 開啟伺服器
-http.createServer(app).listen(port);
+https.createServer(app).listen(port);
 
 const secret = "";
 function getSign(event) {
