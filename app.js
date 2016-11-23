@@ -1,3 +1,4 @@
+var https = require('https');
 var bodyParser = require('body-parser');
 var express = require('express');
 
@@ -9,6 +10,11 @@ app.use(bodyParser.json());
 app.post('/callback', function (req, res) {
   console.log('/callback connected');
   receiver(req, res);
+});
+
+app.get('/', function (req, res) {
+  console.log('/ connected');
+  res.send('Hello!');
 });
 
 app.listen(port, function(){
