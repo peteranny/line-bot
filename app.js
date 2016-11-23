@@ -1,18 +1,19 @@
-var https = require('https');
 var bodyParser = require('body-parser');
 var express = require('express');
 
-var port = process.env.port || 1337
+var port = process.env.port || 5000
 var app = express();
+
 app.use(bodyParser.json());
 
-// 接聽來自Line伺服器中的訊息，交由Function receiver處理
 app.post('/callback', function (req, res) {
+  console.log('/callback connected');
   receiver(req, res);
 });
 
-// 開啟伺服器
-https.createServer(app).listen(port);
+app.listen(port, function(){
+  console.log('listening on port '+port);
+});
 
 const secret = "";
 function getSign(event) {
