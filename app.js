@@ -11,12 +11,12 @@ app.use(bodyParser.urlencoded({extended:false}));
 
 app.post('/callback', function (req, res) {
   console.log('/callback connected');
-  const sign = req.headers['X-Line-Signature'];
-  const body = req.body;
+  const sign = req.headers['x-line-signature'];
+  console.log(req.headers);
 
   const secret = "a97159428f8dd98b12dda1fad43259f0";
   const hmac = crypto.createHmac('sha256', utf8.encode(secret));
-  hmac.update(utf8.encode(body));
+  hmac.update(utf8.encode(req.body));
   const sign2 = hmac.digest('base64');
 
   console.log(sign);
