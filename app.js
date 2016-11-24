@@ -36,9 +36,11 @@ function receiver(req, res) {
   var data = req.body;
   if (getSign(req) == req.get("X-LINE-ChannelSignature")) {
     // ChannelSignature 正確，處理訊息
+    console.log('200 OK');
     res.sendStatus(200);
   }
-  else
+  else{
+    console.log('403 Conflict');
     res.sendStatus(403); //ChannelSignature錯誤，回傳403
-
+}
 }
