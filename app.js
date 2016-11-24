@@ -22,7 +22,7 @@ app.listen(app.get('port'), function() {
   console.log('Node app is running on port', app.get('port'));
 });
 
-const secret = "";
+const secret = "81652c23e1e57338595bb40867976a4e";
 function getSign(event) {
   var crypto = require('crypto');
   var body = new Buffer(JSON.stringify(event.body), 'utf8');
@@ -41,5 +41,5 @@ function receiver(req, res) {
   else{
     console.log('403 Conflict');
     res.sendStatus(403); //ChannelSignature錯誤，回傳403
-}
+  }
 }
