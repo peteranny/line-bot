@@ -15,8 +15,8 @@ app.post('/callback', function (req, res) {
   console.log(req.headers);
 
   const secret = "a97159428f8dd98b12dda1fad43259f0";
-  const hmac = crypto.createHmac('sha256', utf8.encode(secret));
-  hmac.update(utf8.encode(req.body));
+  const hmac = crypto.createHmac('sha256', secret);
+  hmac.update(req.body);
   const sign2 = hmac.digest('base64');
 
   console.log(sign);
