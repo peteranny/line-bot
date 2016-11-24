@@ -2,10 +2,9 @@ var https = require('https');
 var bodyParser = require('body-parser');
 var express = require('express');
 
-var port = process.env.port || 5000
 var app = express();
 
-app.use(express.static(__dirname));
+app.set('port', (process.env.PORT || 5000));
 
 app.use(bodyParser.json());
 
@@ -19,8 +18,8 @@ app.get('/', function (req, res) {
   res.send('Hello!');
 });
 
-app.listen(port, function(){
-  console.log('listening on port '+port);
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
 
 const secret = "";
