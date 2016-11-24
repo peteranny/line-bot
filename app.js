@@ -1,22 +1,21 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var utf8 = require('utf8');
 var crypto = require('crypto');
 
 var app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
-app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.text({type:'*/*'}));//.urlencoded({extended:false}));
 
 app.post('/callback', function (req, res) {
   console.log('/callback connected');
   const sign = req.headers['x-line-signature'];
-  console.log(req.headers);
+  const body = req.body;
 
   const secret = "a97159428f8dd98b12dda1fad43259f0";
   const hmac = crypto.createHmac('sha256', secret);
-  hmac.update(req.body);
+  hmac.update(body, 'utf8');
   const sign2 = hmac.digest('base64');
 
   console.log(sign);
