@@ -1,41 +1,37 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-var crypto = require('crypto');
+const express = require('express');
+const bodyParser = require('body-parser');
+const crypto = require('crypto');
 
-var app = express();
+const app = express();
 
 app.set('port', (process.env.PORT || 5000));
 
-app.use(bodyParser.text({type:'*/*'}));//.urlencoded({extended:false}));
+app.use(bodyParser.text({type:'*/*'}));
 
-app.post('/callback', function (req, res) {
+app.post('/callback', (req, res) => {
   console.log('/callback connected');
-  const sign = req.headers['x-line-signature'];
-  const body = req.body;
-
-  const secret = "a97159428f8dd98b12dda1fad43259f0";
-  const hmac = crypto.createHmac('sha256', secret);
-  hmac.update(body, 'utf8');
-  const sign2 = hmac.digest('base64');
-
-  console.log(sign);
-  console.log(sign2);
-
-  if(sign==sign2){
-    res.sendStatus(200);
+  if(!verify(req.headers['x-line-signature'], req.body)){
+    console.log('Forbidden');
+    return res.sendStatus(403);
   }
-  else{
-    res.sendStatus(403);
-  }
-  return;
+  console.log('OK');
+  return res.sendStatus(200);
 });
 
-app.get('/', function (req, res) {
+app.get('/', (req, res) => {
   console.log('/ connected');
   res.send('Hello!');
 });
 
-app.listen(app.get('port'), function() {
+app.listen(app.get('port'), () => {
   console.log('Node app is running on port', app.get('port'));
 });
+
+function verify(sign, body){
+  const secret = "a97159428f8dd98b12dda1fad43259f0";
+  const hmac = crypto.createHmac('sha256', secret);
+  hmac.update(body, 'utf8');
+  const sign2 = hmac.digest('base64');
+  return sign==sign2;
+}
 
