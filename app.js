@@ -9,7 +9,7 @@ app.set('port', (process.env.PORT || 5000));
 app.use(bodyParser.text({type:'*/*'}));
 
 app.post('/callback', (req, res) => {
-  console.log('/callback connected');
+  console.log('/callback connected: signature=' + req.headers['x-line-signature']);
   if(!verify(req.headers['x-line-signature'], req.body)){
     console.log('Forbidden');
     return res.sendStatus(403);
