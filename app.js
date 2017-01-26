@@ -12,11 +12,17 @@ app.post('/callback', (req, res) => {
     console.log('/callback connected: signature=' + req.headers['x-line-signature']);
     if(!verify(req.headers['x-line-signature'], req.body)){
         console.log('Forbidden');
-        return res.sendStatus(403);
+        res.sendStatus(403);
+        return;
     }
     console.log('OK');
+    console.log('[REQUEST]');
     console.log(req.body);
-    return res.sendStatus(200);
+    genReply(body, function(reply){
+        console.log('[REPLY]');
+        console.log(reply);
+        res.status(200).json(reply);
+    });
 });
 
 app.get('/', (req, res) => {
