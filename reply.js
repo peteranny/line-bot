@@ -13,6 +13,13 @@ module.exports = function(messages, acc_tok, next){
                     'Authorization': 'Bearer ' + acc_tok,
                 },
             };
+            const body = {
+                to: one.userId,
+                messages: [{
+                    type: 'text',
+                    text: one.message,
+                }],
+            };
             const req = https.request(options, function(res) {
                 const buf = [], n = 0;
                 res.on('data', function(chunk) {
@@ -35,17 +42,11 @@ module.exports = function(messages, acc_tok, next){
                     reject(err);
                 });
             });
-            const body = {
-                to: one.userId,
-                messages: [{
-                    type: 'text',
-                    text: one.message,
-                }],
-            };
+            req.write(body);
+            req.end();
             req.on('error', function(e) {
                 reject(e);
             });
-            req.end();
         }))();
     }).then(function(){
         next();
