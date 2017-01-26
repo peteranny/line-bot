@@ -13,6 +13,7 @@ module.exports = function(messages, acc_tok, next){
                     'Authorization': 'Bearer ' + acc_tok,
                 },
             };
+            console.log(options);
             const body = {
                 replyToken: one.replyToken,
                 messages: [{
