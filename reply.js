@@ -36,7 +36,7 @@ module.exports = function(messages, acc_tok, next){
                 });
             });
             const body = {
-                replyToken: one.replyToken,
+                to: one.userId,
                 messages: [{
                     type: 'text',
                     text: one.message,

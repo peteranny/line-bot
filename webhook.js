@@ -9,7 +9,7 @@ module.exports = function(data, next){
             if(source_type != 'user'){
                 throw new Error('Skip non-user type='+type);
             }
-            const source_id = source.userId;
+            const source_userId = source.userId;
             if(type == 'message'){
                 const replyToken = event.replyToken;
                 const message = event.message;
@@ -18,7 +18,7 @@ module.exports = function(data, next){
                 if(message_type == 'text'){
                     const text = message.text;
                     return {
-                        replyToken: replyToken,
+                        userId: source_userId,
                         message: text,
                     };
                 }
