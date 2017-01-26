@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
-const genReply = require('./gen-reply');
+const webhook = require('./webhook');
 
 const app = express();
 
@@ -19,11 +19,7 @@ app.post('/callback', (req, res) => {
     console.log('OK');
     console.log('[REQUEST]');
     console.log(req.body);
-    genReply(body, function(reply){
-        console.log('[REPLY]');
-        console.log(reply);
-        res.status(200).json(reply);
-    });
+    webhook(body);
 });
 
 app.get('/', (req, res) => {
