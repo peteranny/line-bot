@@ -19,14 +19,21 @@ module.exports = function(messages, acc_tok, next){
                     buf.push(chunk);
                 });
                 res.on('end', function() {
-                    const json = JSON.parse(Buffer.concat(buf).toString());
-                    if(isEmptyObject(json)){
-                        resolve();
-                    }
-                    else{
-                        reject(new Error('Reply response not right'));
+                    try{
+                        const json = JSON.parse(Buffer.concat(buf).toString());
+                        if(isEmptyObject(json)){
+                            resolve();
+                        }
+                        else{
+                            reject(new Error('Reply response not right'));
+                        }
+                    } catch(err) {
+                        reject(err);
                     }
                 })
+                res.on('error', function(err) {
+                    reject(err);
+                });
             });
             const body = {
                 replyToken: one.replyToken,
