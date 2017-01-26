@@ -21,7 +21,7 @@ app.post('/callback', (req, res) => {
     console.log('OK');
     console.log('[REQUEST]');
     console.log(req.body);
-    webhook(req.body, function(err, replyToken, messages){
+    webhook(req.body, function(err,messages){
         if(err) console.log('ERROR: '+err);
         else{
             reply(messages, acc_tok, function(err){
