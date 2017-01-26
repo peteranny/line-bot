@@ -14,12 +14,12 @@ module.exports = function(messages, acc_tok, next){
                 },
             };
             const req = https.request(options, function(res) {
-                const buf = new Buffer(1024*1024), n = 0;
+                const buf = [], n = 0;
                 res.on('data', function(chunk) {
-                    n += buf.write(chunk, n);
+                    buf.push(chunk);
                 });
                 res.on('end', function() {
-                    const json = JSON.parse(buf.slice(0,n).toString());
+                    const json = JSON.parse(Buffer.concat(buf).toString());
                     if(isEmptyObject(json)){
                         resolve();
                     }
