@@ -42,7 +42,7 @@ module.exports = function(messages, acc_tok, next){
                     reject(err);
                 });
             });
-            req.write(body);
+            req.write(JSON.stringify(body));
             req.end();
             req.on('error', function(e) {
                 reject(e);
