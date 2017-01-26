@@ -18,7 +18,7 @@ module.exports = function(data, next){
                 if(message_type == 'text'){
                     const text = message.text;
                     return {
-                        userId: source_userId,
+                        replyToken: replyToken,
                         message: text,
                     };
                 }

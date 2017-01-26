@@ -14,7 +14,7 @@ module.exports = function(messages, acc_tok, next){
                 },
             };
             const body = {
-                to: one.userId,
+                replyToken: one.replyToken,
                 messages: [{
                     type: 'text',
                     text: one.message,
