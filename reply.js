@@ -57,5 +57,5 @@ module.exports = function(messages, acc_tok, next){
 }
 
 function isEmptyObject(obj){
-    return Object.keys(json)===0 && json.constructor===Object;
+    return Object.keys(obj)===0 && obj.constructor===Object;
 }
