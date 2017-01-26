@@ -2,6 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const webhook = require('./webhook');
+const reply = require('./reply');
+const acc_tok = require('./acc-tok');
 
 const app = express();
 
@@ -19,7 +21,16 @@ app.post('/callback', (req, res) => {
     console.log('OK');
     console.log('[REQUEST]');
     console.log(req.body);
-    webhook(body);
+    webhook(req.body, function(err, replyToken, messages){
+        if(err) console.log('ERROR: '+err);
+        else{
+            reply(messages, acc_tok, function(err){
+                if(err) console.log('ERROR: '+err);
+                console.log('[RESPONSE]');
+                console.log(messages);
+            });
+        }
+    });
 });
 
 app.get('/', (req, res) => {
