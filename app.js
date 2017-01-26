@@ -26,7 +26,7 @@ app.post('/callback', (req, res) => {
         if(err) console.log('ERROR: '+err);
         else{
             reply(messages, acc_tok, function(err){
-                if(err) console.log('ERROR: '+err);
+                if(err) console.log('ERROR: '+err.toString());
                 else{
                     console.log('[RESPONSE]');
                     console.log(messages);
