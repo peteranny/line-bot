@@ -33,7 +33,7 @@ module.exports = function(messages, acc_tok, next){
                             resolve();
                         }
                         else{
-                            reject(new Error('Reply response not right'));
+                            reject(new Error(json.message));
                         }
                     } catch(err) {
                         reject(err);
