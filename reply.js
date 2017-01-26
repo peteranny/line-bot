@@ -4,16 +4,6 @@ const https = require('https');
 module.exports = function(messages, acc_tok, next){
     Promise.map(messages, function(one){
         return (new Promise(function(resolve, reject){
-            const options = {
-                host: 'api.line.me',
-                path: '/v2/bot/message/reply',
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': 'Bearer ' + acc_tok,
-                },
-            };
-            console.log(options);
             const body = {
                 replyToken: one.replyToken,
                 messages: [{
@@ -21,13 +11,22 @@ module.exports = function(messages, acc_tok, next){
                     text: one.message,
                 }],
             };
+            const options = {
+                host: 'api.line.me',
+                path: '/v2/bot/message/reply',
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Content-Length': Buffer.byteLength(body),
+                    'Authorization': 'Bearer ' + acc_tok,
+                },
+            };
             const req = https.request(options, function(res) {
                 const buf = [], n = 0;
                 res.on('data', function(chunk) {
                     buf.push(chunk);
                 });
                 res.on('end', function() {
-                    console.log(Buffer.concat(buf).toString())
                     try{
                         const json = JSON.parse(Buffer.concat(buf).toString());
                         if(isEmptyObject(json)){
@@ -44,7 +43,6 @@ module.exports = function(messages, acc_tok, next){
                     reject(err);
                 });
             });
-            console.log(body)
             req.write(JSON.stringify(body));
             req.end();
             req.on('error', function(e) {
