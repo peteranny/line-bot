@@ -26,6 +26,7 @@ module.exports = function(messages, acc_tok, next){
                     buf.push(chunk);
                 });
                 res.on('end', function() {
+                    console.log(Buffer.concat(buf).toString())
                     try{
                         const json = JSON.parse(Buffer.concat(buf).toString());
                         if(isEmptyObject(json)){
@@ -42,6 +43,7 @@ module.exports = function(messages, acc_tok, next){
                     reject(err);
                 });
             });
+            console.log(body)
             req.write(JSON.stringify(body));
             req.end();
             req.on('error', function(e) {
