@@ -19,9 +19,10 @@ app.post('/callback', (req, res) => {
         return;
     }
     console.log('OK');
+    const data = JSON.parse(req.body);
     console.log('[REQUEST]');
-    console.log(req.body);
-    webhook(req.body, function(err, messages){
+    console.log(JSON.stringify(data));
+    webhook(data, function(err, messages){
         if(err) console.log('ERROR: '+err);
         else{
             reply(messages, acc_tok, function(err){
