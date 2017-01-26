@@ -3,7 +3,7 @@ const https = require('https');
 
 module.exports = function(messages, acc_tok, next){
     Promise.map(messages, function(one){
-        return new Promise(function(resolve, reject){
+        return (new Promise(function(resolve, reject){
             const options = {
                 host: 'api.line.me',
                 path: '/v2/bot/message/reply',
@@ -39,7 +39,7 @@ module.exports = function(messages, acc_tok, next){
                 reject(e);
             });
             req.end();
-        });
+        }))();
     }).then(function(){
         next();
     }, function(err){
