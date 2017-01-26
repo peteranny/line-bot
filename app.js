@@ -21,13 +21,15 @@ app.post('/callback', (req, res) => {
     console.log('OK');
     console.log('[REQUEST]');
     console.log(req.body);
-    webhook(req.body, function(err,messages){
+    webhook(req.body, function(err, messages){
         if(err) console.log('ERROR: '+err);
         else{
             reply(messages, acc_tok, function(err){
                 if(err) console.log('ERROR: '+err);
-                console.log('[RESPONSE]');
-                console.log(messages);
+                else{
+                    console.log('[RESPONSE]');
+                    console.log(messages);
+                }
             });
         }
     });
