@@ -7,7 +7,7 @@
   },
   "scripts": {
     "start": "node --harmony app.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node --harmony test.js"
   },
   "author": "",
   "license": "ISC",
