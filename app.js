@@ -39,7 +39,7 @@ app.post('/callback', (req, res) => {
                     const replied_text =
                         handleMessage(
                             message.userId,
-                            mesage.text,
+                            message.text,
                             function(text){
                                 runPush(
                                     message.userId,
