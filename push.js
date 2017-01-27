@@ -1,5 +1,5 @@
-const Promise = require('bluebird');
 const https = require('https');
+const lib = require('./lib');
 
 module.exports = function sendPush(to, message, acc_tok){
     return new Promise(function(resolve, reject){
@@ -29,7 +29,7 @@ module.exports = function sendPush(to, message, acc_tok){
             res.on('end', function() {
                 try{
                     const json = JSON.parse(Buffer.concat(buf).toString());
-                    if(isEmptyObject(json)){
+                    if(lib.isEmptyObject(json)){
                         resolve();
                     }
                     else{
@@ -51,6 +51,3 @@ module.exports = function sendPush(to, message, acc_tok){
     });
 }
 
-function isEmptyObject(obj){
-    return Object.keys(obj)===0 && obj.constructor===Object;
-}

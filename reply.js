@@ -1,4 +1,5 @@
 const https = require('https');
+const lib = require('./lib');
 
 module.exports = function(replyToken, message, acc_tok, next){
     const data = {
@@ -27,7 +28,7 @@ module.exports = function(replyToken, message, acc_tok, next){
         res.on('end', function() {
             try{
                 const json = JSON.parse(Buffer.concat(buf).toString());
-                if(isEmptyObject(json)){
+                if(lib.isEmptyObject(json)){
                     next();
                 }
                 else{
@@ -48,6 +49,3 @@ module.exports = function(replyToken, message, acc_tok, next){
     })
 }
 
-function isEmptyObject(obj){
-    return Object.keys(obj).length===0 && obj.constructor===Object;
-}
