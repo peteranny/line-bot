@@ -32,9 +32,9 @@ app.post('/callback', (req, res) => {
             if(err) console.log('ERROR '+err);
             else{
                 Promise.map(messages, function(message){
+                    console.log('[RESPONSE]');
+                    console.log(message);
                     return runReply(message.replyToken, message.text, bot.acc_tok).then(function(){
-                        console.log('[RESPONSE]');
-                        console.log(messages);
                     });
                 }).catch(function(err){
                     console.log('ERROR '+err.toString());
