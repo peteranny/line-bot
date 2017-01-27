@@ -2,6 +2,7 @@ const user_stages = {};
 
 function Stage(userId, push){
     this.stage = 'init';
+    this.timer = null;
     this.next = function(input){
         switch(this.stage){
             case 'init':
@@ -18,11 +19,19 @@ function Stage(userId, push){
                 else{
                     this.stage = 'confirm-start-again';
                 }
+                break;
             case 'sel-role':
+                this.stage = 'exit';
                 break;
             default:
                 console.log('Unknown stage='+this.stage);
         }
+        if(this.timer) clearTimeout(this.timer);
+        this.timer = setTimeout(function(){
+            push('太久沒回答小風馬兒，小風馬兒走掉了><');
+            this.stage = 'exit';
+            this.reply();
+        }.bind(this), 10*1000);
     }
     this.reply = function(){
         switch(this.stage){
