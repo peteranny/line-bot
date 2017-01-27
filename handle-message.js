@@ -3,7 +3,7 @@ const user_stages = {};
 function Stage(userId, push){
     this.stage = 'init';
     this.timer = null;
-    this.next = function(input){
+    this.next = function(input, forceStage){
         switch(this.stage){
             case 'init':
                 this.stage = 'confirm-start';
@@ -23,31 +23,45 @@ function Stage(userId, push){
             case 'sel-role':
                 this.stage = 'exit';
                 break;
+            case 'timeout':
+                this.stage = 'exit';
+                break;
             default:
                 console.log('Unknown stage='+this.stage);
         }
+        if(forceStage) this.stage = forceStage;
+        this.action();
+
+        // timeout
         if(this.timer) clearTimeout(this.timer);
         if(this.stage !== 'exit'){
             this.timer = setTimeout(function(){
-                push('太久沒回答小風馬兒，小風馬兒走掉了><');
-                this.stage = 'exit';
-                this.reply();
+                this.next(null, 'timeout');
             }.bind(this), 10*1000);
         }
     }
-    this.reply = function(){
+    this.action = function(){
         switch(this.stage){
             case 'confirm-start':
-                return '和小風馬兒一起玩好不好?';
+                push('和小風馬兒一起玩好不好?');
+                return;
             case 'confirm-start-again':
-                return '請說「好」或「不好」';
+                push('請說「好」或「不好」');
+                return;
             case 'sel-role':
-                return ['請問你要當誰?', '(1) 小風', '(2) 馬兒'].join('\n');
+                push(['請問你要當誰?', '(1) 小風', '(2) 馬兒'].join('\n'));
+                return;
             case 'exit':
                 delete user_stages[userId];
-                return '小風小馬跟你說掰掰!';
+                push('小風小馬跟你說掰掰!');
+                return;
+            case 'timeout':
+                push('太久沒回答小風馬兒，小風馬兒走掉了><');
+                this.next(null, 'exit');
+                return;
             default:
-                return 'Unknown stage='+this.stage;
+                push('Unknown stage='+this.stage);
+                return;
         }
     }
 }
@@ -58,5 +72,4 @@ module.exports = function(userId, message, push){
     }
     const stage = user_stages[userId];
     stage.next(message);
-    return stage.reply();
 }

@@ -36,27 +36,19 @@ app.post('/callback', (req, res) => {
                 Promise.map(messages, function(message){
                     console.log('[WEBHOOK]');
                     console.log(message);
-                    const replied_text =
-                        handleMessage(
-                            message.userId,
-                            message.text,
-                            function(text){
-                                runPush(
-                                    message.userId,
-                                    text,
-                                    bot.acc_tok
-                                ).then(function(){
-                                    console.log('[PUSH DONE]');
-                                });
-                            }
-                        );
-                    return runReply(
-                        message.replyToken,
-                        replied_text,
-                        bot.acc_tok
-                    ).then(function(){
-                        console.log('[REPLY DONE]');
-                    });
+                    handleMessage(
+                        message.userId,
+                        message.text,
+                        function(text){
+                            runPush(
+                                message.userId,
+                                text,
+                                bot.acc_tok
+                            ).then(function(){
+                                console.log('[PUSH DONE]');
+                            });
+                        }
+                    );
                 }).catch(function(err){
                     console.log('ERROR '+err.toString());
                 });
