@@ -29,12 +29,15 @@ module.exports = function(replyToken, message, acc_tok, next){
         });
         res.on('end', function() {
             try{
-                const json = JSON.parse(Buffer.concat(buf).toString());
-                if(lib.isEmptyObject(json)){
+                const json = Buffer.concat(buf).toString();
+                console.log('[RESPONSE]');
+                console.log(json);
+                const obj = JSON.parse(json);
+                if(lib.isEmptyObject(obj)){
                     next();
                 }
                 else{
-                    next(new Error(json.message));
+                    next(new Error(obj.message));
                 }
             } catch(err) {
                 next(err);
