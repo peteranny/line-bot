@@ -3,8 +3,9 @@ const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const Promise = require('bluebird');
 const webhook = require('./webhook');
-const reply = require('./reply');
-const push = require('./push');
+const runReply = require('./run-reply');
+const runPush = require('./run-push');
+const handleMessage = require('./handle-message');
 const bot = require('./bot');
 
 const app = express();
@@ -35,11 +36,26 @@ app.post('/callback', (req, res) => {
                 Promise.map(messages, function(message){
                     console.log('[WEBHOOK]');
                     console.log(message);
-                    return runReply(message.replyToken, message.text, bot.acc_tok).then(function(){
+                    const replied_text =
+                        handleMessage(
+                            message.userId,
+                            mesage.text,
+                            function(text){
+                                runPush(
+                                    message.userId,
+                                    text,
+                                    bot.acc_tok
+                                ).then(function(){
+                                    console.log('[PUSH DONE]');
+                                });
+                            }
+                        );
+                    return runReply(
+                        message.replyToken,
+                        replied_text,
+                        bot.acc_tok
+                    ).then(function(){
                         console.log('[REPLY DONE]');
-                        return runPush(message.userId, message.text, bot.acc_tok).then(function(){
-                            console.log('[PUSH DONE]');
-                        });
                     });
                 }).catch(function(err){
                     console.log('ERROR '+err.toString());
@@ -65,22 +81,3 @@ function verify(sign, body){
     return sign==sign2;
 }
 
-function runReply(replyToken, message, acc_tok){
-    return new Promise(function(resolve, reject){
-        reply(replyToken, message, acc_tok, function(err){
-            if(err) reject(err);
-            else resolve();
-        });
-    });
-}
-
-function runPush(to, message, acc_tok){
-    return new Promise(function(resolve, reject){
-        setTimeout(function(){
-            push(to, message, acc_tok, function(err){
-                if(err) reject(err);
-                else resolve();
-            });
-        }, 1000);
-    });
-}
