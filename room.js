@@ -5,6 +5,9 @@ function Room(){
     this.isAvailable = function(){
         return this.players.length < this.max_nPlayers;
     }
+    this.isEmpty = function(){
+        return this.players.length == 0;
+    }
     this.enter = function(player){
         // room -> user
         if(this.isAvailable()){
@@ -19,6 +22,9 @@ function Room(){
         const i = this.players.indexOf(player);
         if(i >= 0){
             this.players.slice(i, 1);
+        }
+        if(this.isEmpty()){
+            delete Room.prototype.rooms[this.roomId];
         }
     }
     this.has_started = false;
@@ -43,16 +49,16 @@ function Room(){
     }
 }
 
-Room.prototype.rooms = [];
+Room.prototype.rooms = {};
 Room.prototype.available = function(){
     var available = null;
-    Room.prototype.rooms.some(function(room){
+    for(var roomId in Room.prototype.rooms){
+        const room = Room.prototype.rooms[roomId];
         if(room.isAvailable()){
             available = room;
-            return true;
+            break;
         }
-        return false;
-    });
+    };
     if(!available) available = new Room();
     return available;
 }

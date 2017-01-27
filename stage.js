@@ -14,6 +14,7 @@ function Stage(userId, push){
         if(this.room){
             this.room.leave(this);
             this.room = null;
+            this.next(null, 'exit')
         }
     }
     this.timer = null;
@@ -53,7 +54,13 @@ function Stage(userId, push){
                 break;
             case 'enter-room':
             case 'enter-room-wait':
+                if(input == '掰掰'){
+                    this.stage = 'leave-room';
+                }
+                break;
             case 'enter-room-start':
+                break;
+            case 'leave-room':
                 break;
             case 'timeout':
                 this.stage = 'exit';
@@ -66,7 +73,7 @@ function Stage(userId, push){
 
         // timeout
         if(this.timer) clearTimeout(this.timer);
-        if(this.stage !== 'exit'){
+        if(['exit', 'enter-room-wait'].indexOf(this.stage) == -1){
             this.timer = setTimeout(function(){
                 this.next(null, 'timeout');
             }.bind(this), 10*1000);
@@ -101,11 +108,16 @@ function Stage(userId, push){
                 }
                 return;
             case 'enter-room-wait':
-                push('再等一下別人加入>8<');
+                push('先等一下別人才能開始>8< (說「掰掰」可以離開)');
                 return;
             case 'enter-room-start':
                 push('遊戲開始>8<');
-                next(null, 'exit');
+                this.next(null, 'exit');
+                return;
+            case 'leave-room':
+                push('離開房間');
+                this.leaveRoom();
+                this.next(null, 'exit');
                 return;
             case 'exit':
                 delete Stage.prototype.user_stages[userId];
