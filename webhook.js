@@ -19,6 +19,7 @@ module.exports = function(data, next){
                     const text = message.text;
                     return {
                         replyToken: replyToken,
+                        userId: source_userId,
                         text: text,
                     };
                 }

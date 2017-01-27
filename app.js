@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const Promise = require('bluebird');
 const webhook = require('./webhook');
 const reply = require('./reply');
+const push = require('./push');
 const bot = require('./bot');
 
 const app = express();
@@ -34,7 +35,9 @@ app.post('/callback', (req, res) => {
                 Promise.map(messages, function(message){
                     console.log('[RESPONSE]');
                     console.log(message);
-                    return runReply(message.replyToken, message.text, bot.acc_tok);
+                    return runReply(message.replyToken, message.text, bot.acc_tok).then(function(){
+                        return runPush(message.to, message.text, bot.acc_tok);
+                    });
                 }).catch(function(err){
                     console.log('ERROR '+err.toString());
                 });
@@ -65,5 +68,16 @@ function runReply(replyToken, message, acc_tok){
             if(err) reject(err);
             else resolve();
         });
+    });
+}
+
+function runPush(to, message, acc_tok){
+    return new Promise(function(resolve, reject){
+        setTimeout(function(){
+            push(to, message, acc_tok, function(err){
+                if(err) reject(err);
+                else resolve();
+            });
+        }, 1000);
     });
 }
