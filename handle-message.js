@@ -27,11 +27,13 @@ function Stage(userId, push){
                 console.log('Unknown stage='+this.stage);
         }
         if(this.timer) clearTimeout(this.timer);
-        this.timer = setTimeout(function(){
-            push('太久沒回答小風馬兒，小風馬兒走掉了><');
-            this.stage = 'exit';
-            this.reply();
-        }.bind(this), 10*1000);
+        if(this.stage !== 'exit'){
+            this.timer = setTimeout(function(){
+                push('太久沒回答小風馬兒，小風馬兒走掉了><');
+                this.stage = 'exit';
+                this.reply();
+            }.bind(this), 10*1000);
+        }
     }
     this.reply = function(){
         switch(this.stage){
