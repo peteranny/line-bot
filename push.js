@@ -10,6 +10,8 @@ module.exports = function sendPush(to, message, acc_tok, next){
         }],
     };
     const body = JSON.stringify(data);
+    console.log('[PUSH]');
+    console.log(body);
     const options = {
         host: 'api.line.me',
         path: '/v2/bot/message/reply',

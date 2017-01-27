@@ -36,11 +36,9 @@ app.post('/callback', (req, res) => {
                     console.log('[RESPONSE]');
                     console.log(message);
                     return runReply(message.replyToken, message.text, bot.acc_tok).then(function(){
-                        console.log('[REPLY]');
-                        console.log(message);
+                        console.log('[REPLY DONE]');
                         return runPush(message.to, message.text, bot.acc_tok).then(function(){
-                            console.log('[PUSH]');
-                            console.log(message);
+                            console.log('[PUSH DONE]');
                         });
                     });
                 }).catch(function(err){
