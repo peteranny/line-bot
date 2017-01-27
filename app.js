@@ -12,16 +12,22 @@ app.set('port', (process.env.PORT || 5000));
 app.use(bodyParser.text({type:'*/*'}));
 
 app.post('/callback', (req, res) => {
-    console.log('/callback connected: signature=' + req.headers['x-line-signature']);
-    if(!verify(req.headers['x-line-signature'], req.body)){
+    const body = req.body;
+    const data = JSON.parse(body);
+    console.log('[REQUEST]');
+    console.log(JSON.stringify(data));
+
+    const sign = req.headers['x-line-signature'];
+    console.log('/callback connected: signature=' + sign);
+    if(!verify(sign, body)){
         console.log('Forbidden');
         res.sendStatus(403);
         return;
     }
-    console.log('OK');
-    const data = JSON.parse(req.body);
-    console.log('[REQUEST]');
-    console.log(JSON.stringify(data));
+    else{
+        console.log('OK');
+    }
+
     webhook(data, function(err, messages){
         if(err) console.log('ERROR '+err);
         else{
