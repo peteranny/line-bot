@@ -14,7 +14,7 @@ module.exports = function sendPush(to, message, acc_tok, next){
     console.log(body);
     const options = {
         host: 'api.line.me',
-        path: '/v2/bot/message/reply',
+        path: '/v2/bot/message/push',
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
