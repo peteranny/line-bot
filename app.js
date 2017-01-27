@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const crypto = require('crypto');
 const webhook = require('./webhook');
 const reply = require('./reply');
-const acc_tok = require('./acc-tok');
+const bot = require('./bot');
 
 const app = express();
 
@@ -25,7 +25,7 @@ app.post('/callback', (req, res) => {
     webhook(data, function(err, messages){
         if(err) console.log('ERROR '+err);
         else{
-            reply(messages, acc_tok, function(err){
+            reply(messages, bot.acc_tok, function(err){
                 if(err) console.log('ERROR '+err.toString());
                 else{
                     console.log('[RESPONSE]');
@@ -46,8 +46,7 @@ app.listen(app.get('port'), () => {
 });
 
 function verify(sign, body){
-    const secret = "a97159428f8dd98b12dda1fad43259f0";
-    const hmac = crypto.createHmac('sha256', secret);
+    const hmac = crypto.createHmac('sha256', bot.secret);
     hmac.update(body, 'utf8');
     const sign2 = hmac.digest('base64');
     return sign==sign2;
