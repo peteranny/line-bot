@@ -19,7 +19,7 @@ module.exports = function(data, next){
                     const text = message.text;
                     return {
                         replyToken: replyToken,
-                        message: text,
+                        text: text,
                     };
                 }
                 else if(message_type == 'image'){

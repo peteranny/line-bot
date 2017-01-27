@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const crypto = require('crypto');
+const Promise = require('bluebird');
 const webhook = require('./webhook');
 const reply = require('./reply');
 const bot = require('./bot');
@@ -22,20 +23,21 @@ app.post('/callback', (req, res) => {
     if(!verify(sign, body)){
         console.log('Forbidden');
         res.sendStatus(403);
-        return;
     }
     else{
         console.log('OK');
+        res.sendStatus(200);
+
         webhook(data, function(err, messages){
             if(err) console.log('ERROR '+err);
             else{
-                reply(messages, bot.acc_tok, function(err){
-                    if(err) console.log('ERROR '+err.toString());
-                    else{
+                Promise.map(messages, function(message){
+                    return runReply(message.replyToken, message.text, bot.acc_tok).then(function(){
                         console.log('[RESPONSE]');
                         console.log(messages);
-                    }
-                    res.sendStatus(200);
+                    });
+                }).catch(function(err){
+                    console.log('ERROR '+err.toString());
                 });
             }
         });
@@ -58,3 +60,11 @@ function verify(sign, body){
     return sign==sign2;
 }
 
+function runReply(replyToken, message, acc_tok){
+    return new Promise(function(resolve, reject){
+        reply(replyToken, message, acc_tok, function(err){
+            if(err) reject(err);
+            else resolve();
+        });
+    });
+}
