@@ -51,5 +51,5 @@ module.exports = function(replyToken, message, acc_tok, next){
 }
 
 function isEmptyObject(obj){
-    return Object.keys(obj)===0 && obj.constructor===Object;
+    return Object.keys(obj).length===0 && obj.constructor===Object;
 }
