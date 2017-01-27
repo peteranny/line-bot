@@ -26,20 +26,20 @@ app.post('/callback', (req, res) => {
     }
     else{
         console.log('OK');
+        webhook(data, function(err, messages){
+            if(err) console.log('ERROR '+err);
+            else{
+                reply(messages, bot.acc_tok, function(err){
+                    if(err) console.log('ERROR '+err.toString());
+                    else{
+                        console.log('[RESPONSE]');
+                        console.log(messages);
+                    }
+                    res.sendStatus(200);
+                });
+            }
+        });
     }
-
-    webhook(data, function(err, messages){
-        if(err) console.log('ERROR '+err);
-        else{
-            reply(messages, bot.acc_tok, function(err){
-                if(err) console.log('ERROR '+err.toString());
-                else{
-                    console.log('[RESPONSE]');
-                    console.log(messages);
-                }
-            });
-        }
-    });
 });
 
 app.get('/', (req, res) => {
