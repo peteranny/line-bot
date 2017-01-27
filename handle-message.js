@@ -2,6 +2,7 @@ const user_stages = {};
 
 function Stage(userId, push){
     this.stage = 'init';
+    this.data = {};
     this.timer = null;
     this.next = function(input, forceStage){
         switch(this.stage){
@@ -21,7 +22,20 @@ function Stage(userId, push){
                 }
                 break;
             case 'sel-role':
-                this.stage = 'exit';
+            case 'sel-role-again':
+                if(input == '小風'){
+                    this.stage = 'confirm-role';
+                    this.data.name = '小風';
+                }
+                else if(input == '馬兒'){
+                    this.stage = 'confirm-role';
+                    this.data.name = '馬兒';
+                }
+                else{
+                    this.stage = 'sel-role-again';
+                }
+                break;
+            case 'confirm-role':
                 break;
             case 'timeout':
                 this.stage = 'exit';
@@ -46,14 +60,21 @@ function Stage(userId, push){
                 push('和小風馬兒一起玩好不好?');
                 return;
             case 'confirm-start-again':
-                push('請說「好」或「不好」');
+                push('請說好或不好');
                 return;
             case 'sel-role':
-                push(['請問你要當誰?', '(1) 小風', '(2) 馬兒'].join('\n'));
+                push('請問你要當小風還是馬兒?');
+                return;
+            case 'sel-role-again':
+                push('請回答小風或馬兒');
+                return;
+            case 'confirm-role':
+                push('你是' + this.data.name);
+                this.next(null, 'exit');
                 return;
             case 'exit':
                 delete user_stages[userId];
-                push('小風小馬跟你說掰掰!');
+                push('小風馬兒跟你說掰掰!');
                 return;
             case 'timeout':
                 push('太久沒回答小風馬兒，小風馬兒走掉了><');
