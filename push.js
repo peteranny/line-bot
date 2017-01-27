@@ -1,17 +1,7 @@
 const Promise = require('bluebird');
 const https = require('https');
 
-module.exports = function(messages, acc_tok, next){
-    Promise.map(messages, function(message){
-        return sendPush(message.replyToken, message.message, acc_tok);
-    }).then(function(){
-        next();
-    }, function(err){
-        next(err);
-    });
-}
-
-function sendPush(to, message, acc_tok){
+module.exports = function sendPush(to, message, acc_tok){
     return new Promise(function(resolve, reject){
         const data = {
             to: to,
