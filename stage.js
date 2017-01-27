@@ -1,4 +1,5 @@
 const Room = require('./room');
+const lib = require('./lib');
 
 function Stage(userId, push){
     this.stage = 'init';
@@ -88,7 +89,7 @@ function Stage(userId, push){
                 return;
             case 'confirm-role':
                 push('你是' + this.data.name);
-//                this.next();
+                this.next();
                 return;
             case 'enter-room':
                 this.room = Room.prototype.available();

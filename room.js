@@ -2,7 +2,7 @@ function Room(){
     this.roomId = Math.random().toString().replace(/\D/g, '');
     this.players = [];
     this.max_nPlayers = 2;
-    this.isAvaiable = function(){
+    this.isAvailable = function(){
         return this.players.length < this.max_nPlayers;
     }
     this.enter = function(player){
@@ -21,9 +21,9 @@ function Room(){
             this.players.slice(i, 1);
         }
     }
-    this.hasStarted = false;
+    this.has_started = false;
     this.ready = function(){
-        if(!this.isAvailable && !this.hasStarted){
+        if(!this.isAvailable() && !this.has_started){
             return true;
         }
         return false;
