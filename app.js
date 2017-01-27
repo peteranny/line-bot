@@ -23,10 +23,10 @@ app.post('/callback', (req, res) => {
     console.log('[REQUEST]');
     console.log(JSON.stringify(data));
     webhook(data, function(err, messages){
-        if(err) console.log('ERROR: '+err);
+        if(err) console.log('ERROR '+err);
         else{
             reply(messages, acc_tok, function(err){
-                if(err) console.log('ERROR: '+err.toString());
+                if(err) console.log('ERROR '+err.toString());
                 else{
                     console.log('[RESPONSE]');
                     console.log(messages);
