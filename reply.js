@@ -27,6 +27,8 @@ module.exports = function(replyToken, message, acc_tok, next){
         res.on('end', function() {
             try{
                 const json = JSON.parse(Buffer.concat(buf).toString());
+                console.log('[REPLY]');
+                console.log(json);
                 if(isEmptyObject(json)){
                     next();
                 }
